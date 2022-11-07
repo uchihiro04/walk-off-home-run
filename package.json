@@ -1,0 +1,28 @@
+{
+  "name": "walk-off-home-run",
+  "version": "1.0.0",
+  "description": "Simple baseball game to run in CLI",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uchihiro04/walk-off-home-run.git"
+  },
+  "keywords": [
+    "game",
+    "baseball"
+  ],
+  "author": "uchihiro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/uchihiro04/walk-off-home-run/issues"
+  },
+  "homepage": "https://github.com/uchihiro04/walk-off-home-run#readme",
+  "devDependencies": {
+    "eslint": "^8.27.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.7.1"
+  }
+}
