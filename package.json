@@ -26,6 +26,7 @@
     "prettier": "^2.7.1"
   },
   "dependencies": {
-    "enquirer": "^2.3.6"
+    "enquirer": "^2.3.6",
+    "keypress": "^0.2.1"
   }
 }
