@@ -18,13 +18,6 @@ function explainGame() {
   console.log(description.join("\n"));
 }
 
-function explainFirstRound() {
-  console.log("1回戦 9回裏4対3 2アウト1塁 ");
-  console.log(
-    "監督「相手はストレートに自信を持っているようだ。特徴を頭に入れて打席に立つんだぞ」"
-  );
-}
-
 function createPictcherOfFirstRound() {
   const pitcherOfFirstRound = {
     varietyOfPitches: ["ストレート", "カーブ", "フォーク"],
@@ -61,6 +54,11 @@ function createPictcherOfFinal() {
 }
 
 async function playFirstRound() {
+  console.log("1回戦 9回裏4対3 2アウト1塁 ");
+  console.log(
+    "監督「相手はストレートに自信を持っているようだ。特徴を頭に入れて打席に立つんだぞ」"
+  );
+
   const firstPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
@@ -105,14 +103,12 @@ async function playFirstRound() {
   }
 }
 
-function explainSemifinals() {
+async function playSemifinals() {
   console.log("\n準決勝 9回裏8対6 2アウト1、2塁 ");
   console.log(
     "監督「相手は2種類の落ちる球を武器にしているようだ。特徴を頭に入れて打席に立つんだぞ」"
   );
-}
 
-async function playSemifinals() {
   const firstPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
@@ -157,14 +153,12 @@ async function playSemifinals() {
   }
 }
 
-function explainFinals() {
+async function playFinal() {
   console.log("\n決勝 9回裏3対0 2アウト1塁 ");
   console.log(
     "監督「相手は直球とスピードのある変化球を織り交ぜてくるようだ。特徴を頭に入れて打席に立つんだぞ」"
   );
-}
 
-async function playFinal() {
   const firstPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
@@ -276,19 +270,16 @@ function showClearScreen() {
 
 async function gameRun() {
   explainGame();
-  explainFirstRound();
   const firstRound = await playFirstRound();
   if (!firstRound) {
     return showDefeatScreen();
   }
 
-  explainSemifinals();
   const semifinals = await playSemifinals();
   if (!semifinals) {
     return showDefeatScreen();
   }
 
-  explainFinals();
   const final = await playFinal();
   if (!final) {
     return showDefeatScreen();
