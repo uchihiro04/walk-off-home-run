@@ -2,13 +2,10 @@
 
 const { quiz } = require("enquirer");
 
-function showSynopsis() {
+function explainGame() {
   console.log(
     "甲子園に初出場したnpm高校。前評判を覆し、優勝することはできるのか……。\n"
   );
-}
-
-function explain() {
   const description = [
     "【操作説明】\n相手の球種がいくつか表示されます。球種を1つ選びましょう。",
     "↑ と↓ キーで球種を選択、Enterキーで球種を決定できます。",
@@ -278,8 +275,7 @@ function showClearScreen() {
 }
 
 async function gameRun() {
-  showSynopsis();
-  explain();
+  explainGame();
   explainFirstRound();
   const firstRound = await playFirstRound();
   if (!firstRound) {
