@@ -2,11 +2,72 @@
 
 const { quiz } = require("enquirer");
 
+function showSynopsis() {
+  console.log(
+    "甲子園に初出場したnpm高校。前評判を覆し、優勝することはできるのか……。\n"
+  );
+}
+
+function explain() {
+  const description = [
+    "【操作説明】\n相手の球種がいくつか表示されます。球種を1つ選びましょう。",
+    "↑ と↓ キーで球種を選択、Enterキーで球種を決定できます。",
+    "相手の投げた球種とあなたの選択した球種が一致した場合、あなたの勝ちです。",
+    "球種が一致しなかった場合、ストライクが1つ増えます。",
+    "ストライクが3つになった場合、あなたの負けです。",
+    "試合は最大3試合です。",
+    "監督が伝えてくる特徴をヒントに、試合を勝利に導きましょう！\n",
+  ];
+  console.log(description.join("\n"));
+}
+
+function explainFirstRound() {
+  console.log("1回戦 9回裏4対3 2アウト1塁 ");
+  console.log(
+    "監督「相手はストレートに自信を持っているようだ。特徴を頭に入れて打席に立つんだぞ」"
+  );
+}
+
+function createPictcherOfFirstRound() {
+  const pitcherOfFirstRound = {
+    varietyOfPitches: ["ストレート", "カーブ", "フォーク"],
+  };
+  return pitcherOfFirstRound;
+}
+
+function createPictcherOfSemifinals() {
+  const pitcherOfSemifinals = {
+    varietyOfPitches: [
+      "ストレート",
+      "スライダー",
+      "フォーク",
+      "チェンジアップ",
+      "シンカー",
+    ],
+  };
+  return pitcherOfSemifinals;
+}
+
+function createPictcherOfFinal() {
+  const pitcherOfFinal = {
+    varietyOfPitches: [
+      "ストレート",
+      "スライダー",
+      "カットボール",
+      "カーブ",
+      "フォーク",
+      "スプリット",
+      "シュート",
+    ],
+  };
+  return pitcherOfFinal;
+}
+
 async function playFirstRound() {
   const firstPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
-    choices: ["ストレート", "カーブ", "フォーク"],
+    choices: createPictcherOfFirstRound().varietyOfPitches,
     correctChoice: determinePitchTypeForFirstRound(),
   });
 
@@ -20,7 +81,7 @@ async function playFirstRound() {
   const secondPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
-    choices: ["ストレート", "カーブ", "フォーク"],
+    choices: createPictcherOfFirstRound().varietyOfPitches,
     correctChoice: determinePitchTypeForFirstRound(),
   });
 
@@ -34,7 +95,7 @@ async function playFirstRound() {
   const thirdPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
-    choices: ["ストレート", "カーブ", "フォーク"],
+    choices: createPictcherOfFirstRound().varietyOfPitches,
     correctChoice: determinePitchTypeForFirstRound(),
   });
 
@@ -45,19 +106,20 @@ async function playFirstRound() {
     console.log("三振…… 試合に負けてしまった……");
     return false;
   }
+}
+
+function explainSemifinals() {
+  console.log("\n準決勝 9回裏8対6 2アウト1、2塁 ");
+  console.log(
+    "監督「相手は2種類の落ちる球を武器にしているようだ。特徴を頭に入れて打席に立つんだぞ」"
+  );
 }
 
 async function playSemifinals() {
   const firstPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
-    choices: [
-      "ストレート",
-      "スライダー",
-      "フォーク",
-      "チェンジアップ",
-      "シンカー",
-    ],
+    choices: createPictcherOfSemifinals().varietyOfPitches,
     correctChoice: determinePitchTypeForSemifinals(),
   });
 
@@ -71,13 +133,7 @@ async function playSemifinals() {
   const secondPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
-    choices: [
-      "ストレート",
-      "スライダー",
-      "フォーク",
-      "チェンジアップ",
-      "シンカー",
-    ],
+    choices: createPictcherOfSemifinals().varietyOfPitches,
     correctChoice: determinePitchTypeForSemifinals(),
   });
 
@@ -91,13 +147,7 @@ async function playSemifinals() {
   const thirdPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
-    choices: [
-      "ストレート",
-      "スライダー",
-      "フォーク",
-      "チェンジアップ",
-      "シンカー",
-    ],
+    choices: createPictcherOfSemifinals().varietyOfPitches,
     correctChoice: determinePitchTypeForSemifinals(),
   });
 
@@ -110,19 +160,18 @@ async function playSemifinals() {
   }
 }
 
+function explainFinals() {
+  console.log("\n決勝 9回裏3対0 2アウト1塁 ");
+  console.log(
+    "監督「相手は直球とスピードのある変化球を織り交ぜてくるようだ。特徴を頭に入れて打席に立つんだぞ」"
+  );
+}
+
 async function playFinal() {
   const firstPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
-    choices: [
-      "ストレート",
-      "スライダー",
-      "カットボール",
-      "カーブ",
-      "フォーク",
-      "スプリット",
-      "シュート",
-    ],
+    choices: createPictcherOfFinal().varietyOfPitches,
     correctChoice: determinePitchTypeForFinal(),
   });
 
@@ -136,15 +185,7 @@ async function playFinal() {
   const secondPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
-    choices: [
-      "ストレート",
-      "スライダー",
-      "カットボール",
-      "カーブ",
-      "フォーク",
-      "スプリット",
-      "シュート",
-    ],
+    choices: createPictcherOfFinal().varietyOfPitches,
     correctChoice: determinePitchTypeForFinal(),
   });
 
@@ -158,15 +199,7 @@ async function playFinal() {
   const thirdPitches = await quiz({
     name: "varieyOfPitches",
     message: "相手はこの球を投げてくるはず！",
-    choices: [
-      "ストレート",
-      "スライダー",
-      "カットボール",
-      "カーブ",
-      "フォーク",
-      "スプリット",
-      "シュート",
-    ],
+    choices: createPictcherOfFinal().varietyOfPitches,
     correctChoice: determinePitchTypeForFinal(),
   });
 
@@ -245,16 +278,21 @@ function showClearScreen() {
 }
 
 async function gameRun() {
+  showSynopsis();
+  explain();
+  explainFirstRound();
   const firstRound = await playFirstRound();
   if (!firstRound) {
     return showDefeatScreen();
   }
 
+  explainSemifinals();
   const semifinals = await playSemifinals();
   if (!semifinals) {
     return showDefeatScreen();
   }
 
+  explainFinals();
   const final = await playFinal();
   if (!final) {
     return showDefeatScreen();
