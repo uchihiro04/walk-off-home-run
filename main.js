@@ -18,6 +18,15 @@ function explainGame() {
   console.log(description.join("\n"));
 }
 
+function pitchInFirstRound() {
+  return {
+    name: "varieyOfPitches",
+    message: "相手はこの球を投げてくるはず！",
+    choices: createPictcherOfFirstRound().varietyOfPitches,
+    correctChoice: determinePitchTypeForFirstRound(),
+  };
+}
+
 function createPictcherOfFirstRound() {
   const pitcherOfFirstRound = {
     varietyOfPitches: ["ストレート", "カーブ", "フォーク"],
@@ -59,13 +68,7 @@ async function playFirstRound() {
     "監督「相手はストレートに自信を持っているようだ。特徴を頭に入れて打席に立つんだぞ」"
   );
 
-  const firstPitches = await quiz({
-    name: "varieyOfPitches",
-    message: "相手はこの球を投げてくるはず！",
-    choices: createPictcherOfFirstRound().varietyOfPitches,
-    correctChoice: determinePitchTypeForFirstRound(),
-  });
-
+  const firstPitches = await quiz(pitchInFirstRound());
   if (firstPitches.correct) {
     console.log("ホームラン！");
     return true;
@@ -73,13 +76,7 @@ async function playFirstRound() {
     console.log("空振り…… 狙いが外れたか");
   }
 
-  const secondPitches = await quiz({
-    name: "varieyOfPitches",
-    message: "相手はこの球を投げてくるはず！",
-    choices: createPictcherOfFirstRound().varietyOfPitches,
-    correctChoice: determinePitchTypeForFirstRound(),
-  });
-
+  const secondPitches = await quiz(pitchInFirstRound());
   if (secondPitches.correct) {
     console.log("ホームラン！");
     return true;
@@ -87,13 +84,7 @@ async function playFirstRound() {
     console.log("空振り…… 追い込まれたぞ");
   }
 
-  const thirdPitches = await quiz({
-    name: "varieyOfPitches",
-    message: "相手はこの球を投げてくるはず！",
-    choices: createPictcherOfFirstRound().varietyOfPitches,
-    correctChoice: determinePitchTypeForFirstRound(),
-  });
-
+  const thirdPitches = await quiz(pitchInFirstRound());
   if (thirdPitches.correct) {
     console.log("ホームラン！");
     return true;
@@ -101,6 +92,15 @@ async function playFirstRound() {
     console.log("三振…… 試合に負けてしまった……");
     return false;
   }
+}
+
+function pitchInSemifinals() {
+  return {
+    name: "varieyOfPitches",
+    message: "相手はこの球を投げてくるはず！",
+    choices: createPictcherOfSemifinals().varietyOfPitches,
+    correctChoice: determinePitchTypeForSemifinals(),
+  };
 }
 
 async function playSemifinals() {
@@ -109,13 +109,7 @@ async function playSemifinals() {
     "監督「相手は2種類の落ちる球を武器にしているようだ。特徴を頭に入れて打席に立つんだぞ」"
   );
 
-  const firstPitches = await quiz({
-    name: "varieyOfPitches",
-    message: "相手はこの球を投げてくるはず！",
-    choices: createPictcherOfSemifinals().varietyOfPitches,
-    correctChoice: determinePitchTypeForSemifinals(),
-  });
-
+  const firstPitches = await quiz(pitchInSemifinals());
   if (firstPitches.correct) {
     console.log("ホームラン！");
     return true;
@@ -123,13 +117,7 @@ async function playSemifinals() {
     console.log("空振り…… 狙いが外れたか");
   }
 
-  const secondPitches = await quiz({
-    name: "varieyOfPitches",
-    message: "相手はこの球を投げてくるはず！",
-    choices: createPictcherOfSemifinals().varietyOfPitches,
-    correctChoice: determinePitchTypeForSemifinals(),
-  });
-
+  const secondPitches = await quiz(pitchInSemifinals());
   if (secondPitches.correct) {
     console.log("ホームラン！");
     return true;
@@ -137,13 +125,7 @@ async function playSemifinals() {
     console.log("空振り…… 追い込まれたぞ");
   }
 
-  const thirdPitches = await quiz({
-    name: "varieyOfPitches",
-    message: "相手はこの球を投げてくるはず！",
-    choices: createPictcherOfSemifinals().varietyOfPitches,
-    correctChoice: determinePitchTypeForSemifinals(),
-  });
-
+  const thirdPitches = await quiz(pitchInSemifinals());
   if (thirdPitches.correct) {
     console.log("ホームラン！");
     return true;
@@ -153,19 +135,22 @@ async function playSemifinals() {
   }
 }
 
+function pitchInFinal() {
+  return {
+    name: "varieyOfPitches",
+    message: "相手はこの球を投げてくるはず！",
+    choices: createPictcherOfFinal().varietyOfPitches,
+    correctChoice: determinePitchTypeForFinal(),
+  };
+}
+
 async function playFinal() {
   console.log("\n決勝 9回裏3対0 2アウト1塁 ");
   console.log(
     "監督「相手は直球とスピードのある変化球を織り交ぜてくるようだ。特徴を頭に入れて打席に立つんだぞ」"
   );
 
-  const firstPitches = await quiz({
-    name: "varieyOfPitches",
-    message: "相手はこの球を投げてくるはず！",
-    choices: createPictcherOfFinal().varietyOfPitches,
-    correctChoice: determinePitchTypeForFinal(),
-  });
-
+  const firstPitches = await quiz(pitchInFinal());
   if (firstPitches.correct) {
     console.log("ホームラン！");
     return true;
@@ -173,13 +158,7 @@ async function playFinal() {
     console.log("空振り…… 狙いが外れたか");
   }
 
-  const secondPitches = await quiz({
-    name: "varieyOfPitches",
-    message: "相手はこの球を投げてくるはず！",
-    choices: createPictcherOfFinal().varietyOfPitches,
-    correctChoice: determinePitchTypeForFinal(),
-  });
-
+  const secondPitches = await quiz(pitchInFinal());
   if (secondPitches.correct) {
     console.log("ホームラン！");
     return true;
@@ -187,13 +166,7 @@ async function playFinal() {
     console.log("空振り…… 追い込まれたぞ");
   }
 
-  const thirdPitches = await quiz({
-    name: "varieyOfPitches",
-    message: "相手はこの球を投げてくるはず！",
-    choices: createPictcherOfFinal().varietyOfPitches,
-    correctChoice: determinePitchTypeForFinal(),
-  });
-
+  const thirdPitches = await quiz(pitchInFinal());
   if (thirdPitches.correct) {
     console.log("ホームラン！");
     return true;
