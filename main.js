@@ -28,39 +28,12 @@ function pitchInFirstRound() {
   };
 }
 
-async function playFirstRound() {
+function playFirstRound() {
   console.log("1回戦 9回裏4対3 2アウト1塁 ");
   console.log(
     "監督「相手はストレートに自信を持っているようだ。特徴を頭に入れて打席に立つんだぞ」"
   );
-
-  const firstPitches = await quiz(pitchInFirstRound());
-  if (firstPitches.correct) {
-    console.log("ホームラン！");
-    console.log("監督「よくやった！これで初戦突破だ！」");
-    return true;
-  } else {
-    console.log("空振り…… これで1ストライクだ");
-  }
-
-  const secondPitches = await quiz(pitchInFirstRound());
-  if (secondPitches.correct) {
-    console.log("ホームラン！");
-    console.log("監督「よくやった！これで初戦突破だ！」");
-    return true;
-  } else {
-    console.log("空振り…… これで2ストライク、追い込まれたぞ");
-  }
-
-  const thirdPitches = await quiz(pitchInFirstRound());
-  if (thirdPitches.correct) {
-    console.log("ホームラン！");
-    console.log("監督「よくやった！これで初戦突破だ！」");
-    return true;
-  } else {
-    console.log("三振…… 試合に負けてしまった……");
-    return false;
-  }
+  return playHitter(pitchInFirstRound);
 }
 
 function pitchInSemifinals() {
@@ -79,39 +52,14 @@ function pitchInSemifinals() {
 }
 
 async function playSemifinals() {
+  console.log("監督「よくやった！これで初戦突破だ！」");
   console.log("\nその後も勝利を積み重ねたnpm高校は、準決勝まで勝ち上がった……");
   console.log("\n準決勝 9回裏8対6 2アウト1、2塁 ");
   console.log(
     "監督「相手は2種類の落ちる球を武器にしているようだ。特徴を頭に入れて打席に立つんだぞ」"
   );
 
-  const firstPitches = await quiz(pitchInSemifinals());
-  if (firstPitches.correct) {
-    console.log("ホームラン！");
-    console.log("監督「よくやった！これで決勝進出だ！」");
-    return true;
-  } else {
-    console.log("空振り…… これで1ストライクだ");
-  }
-
-  const secondPitches = await quiz(pitchInSemifinals());
-  if (secondPitches.correct) {
-    console.log("ホームラン！");
-    console.log("監督「よくやった！これで決勝進出だ！」");
-    return true;
-  } else {
-    console.log("空振り…… これで2ストライク、追い込まれたぞ");
-  }
-
-  const thirdPitches = await quiz(pitchInSemifinals());
-  if (thirdPitches.correct) {
-    console.log("ホームラン！");
-    console.log("監督「よくやった！これで決勝進出だ！」");
-    return true;
-  } else {
-    console.log("三振…… 試合に負けてしまった……");
-    return false;
-  }
+  return playHitter(pitchInSemifinals);
 }
 
 function pitchInFinal() {
@@ -132,34 +80,36 @@ function pitchInFinal() {
 }
 
 async function playFinal() {
+  console.log("監督「よくやった！これで決勝進出だ！」");
   console.log("\n快進撃を続けるnpm高校は、ついに決勝まで勝ち上がった……");
   console.log("\n決勝 9回裏3対0 2アウト満塁 ");
   console.log(
     "監督「相手は直球とスピードのある変化球を織り交ぜてくるようだ。特徴を頭に入れて打席に立つんだぞ」"
   );
 
-  const firstPitches = await quiz(pitchInFinal());
+  return playHitter(pitchInFinal);
+}
+
+async function playHitter(pitch) {
+  const firstPitches = await quiz(pitch());
   if (firstPitches.correct) {
     console.log("ホームラン！");
-    console.log("監督「よくやった！これで優勝だ！！」");
     return true;
   } else {
     console.log("空振り…… これで1ストライクだ");
   }
 
-  const secondPitches = await quiz(pitchInFinal());
+  const secondPitches = await quiz(pitch());
   if (secondPitches.correct) {
     console.log("ホームラン！");
-    console.log("監督「よくやった！これで優勝だ！！」");
     return true;
   } else {
     console.log("空振り…… これで2ストライク、追い込まれたぞ");
   }
 
-  const thirdPitches = await quiz(pitchInFinal());
+  const thirdPitches = await quiz(pitch());
   if (thirdPitches.correct) {
     console.log("ホームラン！");
-    console.log("監督「よくやった！これで優勝だ！！」");
     return true;
   } else {
     console.log("三振…… 試合に負けてしまった……");
@@ -229,6 +179,7 @@ function showDefeatScreen() {
 }
 
 function showClearScreen() {
+  console.log("監督「よくやった！これで優勝だ！！」");
   console.log("npm高校は甲子園で優勝した！");
 }
 
