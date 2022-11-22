@@ -1,11 +1,31 @@
 #! /usr/bin/env node
 
 const { quiz } = require("enquirer");
+const fs = require("fs");
 
 function explainGame() {
-  console.log(
-    "甲子園に初出場したnpm高校。前評判を覆し、優勝することはできるのか……。\n"
+  const playCount = readData().playRecords.length + 1;
+  const wins = readData().playRecords.map(
+    (playRecord) => playRecord.numberOfWins
   );
+  const numberOfChampionships = wins.filter((win) => win === 3).length;
+
+  if (playCount === 1) {
+    console.log(
+      `甲子園初出場となるnpm高校。果たして優勝を手にすることはできるのか……。\n`
+    );
+  }
+  if (playCount > 1 && numberOfChampionships === 0) {
+    console.log(
+      `今年で甲子園出場${playCount}回目となるnpm高校。果たして初優勝を手にすることはできるのか……。\n`
+    );
+  }
+  if (playCount > 1 && numberOfChampionships > 0) {
+    console.log(
+      `今までに${numberOfChampionships}回の優勝を経験したnpm高校。甲子園出場${playCount}回目となる今年、果たして優勝を手にすることはできるのか……。\n`
+    );
+  }
+
   const description = [
     "【操作説明】\nあなたはバッターです。",
     "相手投手の球種がいくつか表示されます。球種を1つ選びましょう。",
@@ -31,7 +51,7 @@ function pitchInFirstRound() {
 function playFirstRound() {
   console.log("1回戦 9回裏4対3 2アウト1塁 ");
   console.log(
-    "監督「相手はストレートに自信を持っているようだ。特徴を頭に入れて打席に立つんだぞ」"
+    "監督「相手はストレートに自信を持っているようだ。特徴を頭に入れて打席に立つんだぞ」\n"
   );
   return playHitter(pitchInFirstRound);
 }
@@ -56,7 +76,7 @@ async function playSemifinals() {
   console.log("\nその後も勝利を積み重ねたnpm高校は、準決勝まで勝ち上がった……");
   console.log("\n準決勝 9回裏8対6 2アウト1、2塁 ");
   console.log(
-    "監督「相手は2種類の落ちる球を武器にしているようだ。特徴を頭に入れて打席に立つんだぞ」"
+    "監督「相手は2種類の落ちる球を武器にしているようだ。特徴を頭に入れて打席に立つんだぞ」\n"
   );
 
   return playHitter(pitchInSemifinals);
@@ -84,7 +104,7 @@ async function playFinal() {
   console.log("\n快進撃を続けるnpm高校は、ついに決勝まで勝ち上がった……");
   console.log("\n決勝 9回裏3対0 2アウト満塁 ");
   console.log(
-    "監督「相手は直球とスピードのある変化球を織り交ぜてくるようだ。特徴を頭に入れて打席に立つんだぞ」"
+    "監督「相手は直球とスピードのある変化球を織り交ぜてくるようだ。特徴を頭に入れて打席に立つんだぞ」\n"
   );
 
   return playHitter(pitchInFinal);
@@ -92,27 +112,30 @@ async function playFinal() {
 
 async function playHitter(pitch) {
   const firstPitches = await quiz(pitch());
+  console.log(`相手の球種:${firstPitches.correctAnswer}`);
   if (firstPitches.correct) {
     console.log("ホームラン！");
     return true;
   } else {
-    console.log("空振り…… これで1ストライクだ");
+    console.log("空振り…… これで1ストライクだ\n");
   }
 
   const secondPitches = await quiz(pitch());
+  console.log(`相手の球種:${secondPitches.correctAnswer}`);
   if (secondPitches.correct) {
     console.log("ホームラン！");
     return true;
   } else {
-    console.log("空振り…… これで2ストライク、追い込まれたぞ");
+    console.log("空振り…… これで2ストライク、追い込まれたぞ\n");
   }
 
   const thirdPitches = await quiz(pitch());
+  console.log(`相手の球種:${thirdPitches.correctAnswer}`);
   if (thirdPitches.correct) {
     console.log("ホームラン！");
     return true;
   } else {
-    console.log("三振…… 試合に負けてしまった……");
+    console.log("三振…… 試合に負けてしまった……\n");
     return false;
   }
 }
@@ -174,32 +197,64 @@ function determinePitchTypeForFinal() {
   }
 }
 
-function showDefeatScreen() {
-  console.log("npm高校の夏は終わった……");
+function readData() {
+  const path = "db/gameData.json";
+  if (!fs.existsSync(path)) {
+    return { playRecords: [] };
+  }
+  const jsonFile = fs.readFileSync(path, "utf-8");
+  return JSON.parse(jsonFile);
 }
 
-function showClearScreen() {
+function writeData(playRecords) {
+  const path = "db/gameData.json";
+  const jsonGameDatas = JSON.stringify(playRecords, null, 2);
+  fs.writeFile(path, jsonGameDatas, (err) => {
+    if (err) throw err;
+  });
+}
+
+function createResult(wins) {
+  const gameData = {
+    numberOfWins: wins,
+  };
+  const currenntPlayRecords = readData();
+  currenntPlayRecords.playRecords.push(gameData);
+  writeData(currenntPlayRecords);
+}
+
+function showDefeatScreen(wins) {
+  console.log("npm高校の夏は終わった……");
+  createResult(wins);
+}
+
+async function showClearScreen(wins) {
   console.log("監督「よくやった！これで優勝だ！！」");
   console.log("npm高校は甲子園で優勝した！");
+  createResult(wins);
 }
 
 async function gameRun() {
   explainGame();
+  let wins = 0;
   const firstRound = await playFirstRound();
   if (!firstRound) {
-    return showDefeatScreen();
+    return showDefeatScreen(wins);
   }
 
   const semifinals = await playSemifinals();
+  wins++;
   if (!semifinals) {
-    return showDefeatScreen();
+    return showDefeatScreen(wins);
   }
 
   const final = await playFinal();
+  wins++;
   if (!final) {
-    return showDefeatScreen();
+    return showDefeatScreen(wins);
   } else {
-    return showClearScreen();
+    wins++;
+    return showClearScreen(wins);
   }
 }
 
