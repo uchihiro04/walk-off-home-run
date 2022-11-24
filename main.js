@@ -1,29 +1,46 @@
 #! /usr/bin/env node
 
+const { prompt } = require("enquirer");
 const { quiz } = require("enquirer");
 const fs = require("fs");
 
-function explainGame() {
-  const playCount = readData().playRecords.length + 1;
-  const wins = readData().playRecords.map(
-    (playRecord) => playRecord.numberOfWins
-  );
-  const numberOfChampionships = wins.filter((win) => win === 3).length;
+async function decideName() {
+  const response = await prompt({
+    type: "input",
+    name: "highSchool",
+    message: "高校名を入力してください（末尾に「高校」は付けないでください）",
+  });
+  const gameData = readData();
+  gameData.nameOfHighSchool = response.highSchool;
+  writeData(gameData);
+  return response.highSchool;
+}
 
+function explainGame(highSchool) {
+  const playCount =
+    "playRecords" in readData() ? readData().playRecords.length + 1 : 1;
   if (playCount === 1) {
     console.log(
-      `甲子園初出場となるnpm高校。果たして優勝を手にすることはできるのか……。\n`
+      `甲子園初出場となる${highSchool}高校。果たして優勝を手にすることはできるのか……。\n`
     );
   }
-  if (playCount > 1 && numberOfChampionships === 0) {
-    console.log(
-      `今年で甲子園出場${playCount}回目となるnpm高校。果たして初優勝を手にすることはできるのか……。\n`
+
+  if (playCount > 1) {
+    const wins = readData().playRecords.map(
+      (playRecord) => playRecord.numberOfWins
     );
-  }
-  if (playCount > 1 && numberOfChampionships > 0) {
-    console.log(
-      `今までに${numberOfChampionships}回の優勝を経験したnpm高校。甲子園出場${playCount}回目となる今年、果たして優勝を手にすることはできるのか……。\n`
-    );
+    const numberOfChampionships = wins.filter((win) => win === 3).length;
+
+    if (numberOfChampionships === 0) {
+      console.log(
+        `今年で甲子園出場${playCount}回目となる${highSchool}高校。果たして初優勝を手にすることはできるのか……。\n`
+      );
+    }
+    if (numberOfChampionships > 0) {
+      console.log(
+        `今までに${numberOfChampionships}回の優勝を経験した${highSchool}高校。甲子園出場${playCount}回目となる今年、果たして優勝を手にすることはできるのか……。\n`
+      );
+    }
   }
 
   const description = [
@@ -203,58 +220,65 @@ function readData() {
     return { playRecords: [] };
   }
   const jsonFile = fs.readFileSync(path, "utf-8");
-  return JSON.parse(jsonFile);
+  const gameData = JSON.parse(jsonFile);
+  return gameData;
 }
 
-function writeData(playRecords) {
+function writeData(gameData) {
   const path = "db/gameData.json";
-  const jsonGameDatas = JSON.stringify(playRecords, null, 2);
-  fs.writeFile(path, jsonGameDatas, (err) => {
-    if (err) throw err;
-  });
+  const jsonGameDatas = JSON.stringify(gameData, null, 2);
+  try {
+    fs.writeFileSync(path, jsonGameDatas);
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 function createResult(wins) {
-  const gameData = {
+  const numberOfWins = {
     numberOfWins: wins,
   };
-  const currenntPlayRecords = readData();
-  currenntPlayRecords.playRecords.push(gameData);
-  writeData(currenntPlayRecords);
+  const gameData = readData();
+  gameData.playRecords.push(numberOfWins);
+  writeData(gameData);
 }
 
-function showDefeatScreen(wins) {
-  console.log("npm高校の夏は終わった……");
+function showDefeatScreen(wins, highSchool) {
+  console.log(`${highSchool}高校の夏は終わった……`);
   createResult(wins);
 }
 
-async function showClearScreen(wins) {
+async function showClearScreen(wins, highSchool) {
   console.log("監督「よくやった！これで優勝だ！！」");
-  console.log("npm高校は甲子園で優勝した！");
+  console.log(`${highSchool}高校は甲子園で優勝した！`);
   createResult(wins);
 }
 
 async function gameRun() {
-  explainGame();
+  const highSchool =
+    "nameOfHighSchool" in readData()
+      ? readData().nameOfHighSchool
+      : await decideName();
+  explainGame(highSchool);
   let wins = 0;
   const firstRound = await playFirstRound();
   if (!firstRound) {
-    return showDefeatScreen(wins);
+    return showDefeatScreen(wins, highSchool);
   }
 
   const semifinals = await playSemifinals();
   wins++;
   if (!semifinals) {
-    return showDefeatScreen(wins);
+    return showDefeatScreen(wins, highSchool);
   }
 
   const final = await playFinal();
   wins++;
   if (!final) {
-    return showDefeatScreen(wins);
+    return showDefeatScreen(wins, highSchool);
   } else {
     wins++;
-    return showClearScreen(wins);
+    return showClearScreen(wins, highSchool);
   }
 }
 
