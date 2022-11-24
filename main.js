@@ -3,6 +3,13 @@
 const { prompt } = require("enquirer");
 const { quiz } = require("enquirer");
 const fs = require("fs");
+const argv = require("minimist")(process.argv.slice(2));
+
+// class GameData {
+//   constructor() {
+//     this.path = "db/memo.json";
+//   }
+// }
 
 async function decideName() {
   const response = await prompt({
@@ -220,8 +227,7 @@ function readData() {
     return { playRecords: [] };
   }
   const jsonFile = fs.readFileSync(path, "utf-8");
-  const gameData = JSON.parse(jsonFile);
-  return gameData;
+  return JSON.parse(jsonFile);
 }
 
 function writeData(gameData) {
@@ -254,7 +260,7 @@ async function showClearScreen(wins, highSchool) {
   createResult(wins);
 }
 
-async function gameRun() {
+async function playGame() {
   const highSchool =
     "nameOfHighSchool" in readData()
       ? readData().nameOfHighSchool
@@ -282,4 +288,25 @@ async function gameRun() {
   }
 }
 
-gameRun();
+function deleteData() {
+  const path = "db/gameData.json";
+  if (!fs.existsSync(path)) {
+    return console.log("データがありません");
+  }
+  fs.unlink(path, (err) => {
+    if (err) throw err;
+    console.log("データを削除しました");
+  });
+}
+
+function runGame() {
+  if (argv.d) {
+    return deleteData();
+  }
+  if (Object.keys(argv).length >= 2) {
+    return console.log("指定されたオプションは存在しません");
+  }
+  playGame();
+}
+runGame();
+// playGame();
