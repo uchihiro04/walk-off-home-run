@@ -1,6 +1,8 @@
 # walk-off-home-run
 
 Simple baseball game to run in CLI.
+<img width="582" alt="image" src="https://user-images.githubusercontent.com/77523896/204268404-c6e39460-3873-4e15-a8e4-807410a1ac68.png">
+(All text in the game is in Japanese.)
 
 ## Install
 
@@ -12,6 +14,7 @@ To run the game, execute the following command.
 `walk-off-home-run`
 You will need to enter the name of your high school the first time you start the program.
 Please do not add "high school" to the end.
+<img width="501" alt="image" src="https://user-images.githubusercontent.com/77523896/204268765-651689c5-3752-40ab-8419-c72676c9f363.png">
 
 The following options are also available.
 
