@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Simple baseball game to run in CLI",
   "main": "main.js",
+  "bin": {
+    "walk-off-home-run": "main.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
