@@ -1,6 +1,6 @@
 {
   "name": "walk-off-home-run",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple baseball game to run in CLI",
   "main": "main.js",
   "bin": {
