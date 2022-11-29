@@ -25,6 +25,9 @@ Please do not add "high school" to the end.
 
 <img width="501" alt="image" src="https://user-images.githubusercontent.com/77523896/204268765-651689c5-3752-40ab-8419-c72676c9f363.png">
 
+Once a name is determined, a directory (gamedb) is created to store game data.
+You can reflect the game data by starting the program in the directory where the directory to save the game data exists.
+
 The following options are also available.
 
 - -d
