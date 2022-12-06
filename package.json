@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/uchihiro04/walk-off-home-run#readme",
   "devDependencies": {
-    "eslint": "^8.27.0",
+    "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "prettier": "^2.7.1"
   },
